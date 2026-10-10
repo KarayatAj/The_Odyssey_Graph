@@ -1,6 +1,6 @@
 # The Odyssey Graph
 
-One story, three tellings, one graph: Homer's *Odyssey* (Emily Wilson's translation), *EPIC: The Musical*, and Christopher Nolan's *The Odyssey* (2026) - every character, god, monster, place, song, saga, and actor, modelled as a Neo4j knowledge graph.
+One story, three tellings, one graph: Homer's *Odyssey*, *EPIC: The Musical*, and Christopher Nolan's *The Odyssey* (2026) - every character, god, monster, place, song, saga, and actor, modelled as a Neo4j knowledge graph.
 
 Built as a learning project and written up in full on the GraphAcademy blog: [The Odyssey in a Graph Database](https://graphacademy.neo4j.com/blog/odyssey-graph-database-neo4j).
 
@@ -44,7 +44,7 @@ FOR (n:Entity) REQUIRE n.name IS UNIQUE
 3. Load the nodes:
 
 ```cypher
-LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/Kemi-Elizabeth/odyssey_graph/main/nodes.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/KarayatAj/The_Odyssey_Graph/refs/heads/main/nodes.csv' AS row
 MERGE (n:Entity {name: row.name})
 SET n:$(row.type),
     n.description = row.description,
@@ -55,7 +55,7 @@ SET n:$(row.type),
 4. Load the relationships:
 
 ```cypher
-LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/Kemi-Elizabeth/odyssey_graph/main/relationships.csv' AS row
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/KarayatAj/The_Odyssey_Graph/refs/heads/main/relationships.csv' AS row
 MATCH (a:Entity {name: row.from})
 MATCH (b:Entity {name: row.to})
 MERGE (a)-[r:$(row.type)]->(b)
