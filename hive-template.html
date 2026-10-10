@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+<!-- ═══════════════════════════════════════════════════════════════════
+     HIVE PLOT TEMPLATE  ·  pop your graph data in, let it do the maths
+     ───────────────────────────────────────────────────────────────────
+     Three zones below:
+       1. YOUR DATA  - replace with your own nodes and links
+       2. THE DIALS  - numbers and colours you're invited to change
+       3. THE ENGINE - the maths. Copy it. Trust it. Never edit it.
+     Based on the Odyssey hive plot by Kemi Elizabeth Ojogbede.
+     ═══════════════════════════════════════════════════════════════════ -->
+<body style="margin:0; background:#0e2836; display:flex; justify-content:center;">
+
+<div id="tip" style="position:absolute; opacity:0; background:#f4ead9;
+  color:#16323f; padding:8px 11px; border-radius:8px; font-size:13px;
+  font-family:sans-serif; max-width:260px; pointer-events:none;"></div>
+
+<svg id="chart" width="900" height="900"></svg>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+// ════════════════════════════ 1. YOUR DATA ════════════════════════════
+// One entry per node. "group" = which axis it sits on.
+// "type" = which colour it gets (see COLOR in the dials).
+const nodes = [
+  { name: "Odysseus",   type: "Hero",    group: "character" },
+  { name: "Penelope",   type: "Mortal",  group: "character" },
+  { name: "Telemachus", type: "Mortal",  group: "character" },
+  { name: "Athena",     type: "Deity",   group: "character" },
+  { name: "Poseidon",   type: "Deity",   group: "character" },
+  { name: "Circe",      type: "Deity",   group: "character" },
+  { name: "Calypso",    type: "Deity",   group: "character" },
+  { name: "Polyphemus", type: "Monster", group: "character" },
+  { name: "Just a Man",        type: "Song", group: "song" },
+  { name: "Full Speed Ahead",  type: "Song", group: "song" },
+  { name: "Ruthlessness",      type: "Song", group: "song" },
+  { name: "Done For",          type: "Song", group: "song" },
+  { name: "Love in Paradise",  type: "Song", group: "song" },
+  { name: "Would You Fall in Love with Me Again", type: "Song", group: "song" },
+  { name: "Troy",           type: "Place", group: "place" },
+  { name: "Cyclops Island", type: "Place", group: "place" },
+  { name: "Aeaea",          type: "Place", group: "place" },
+  { name: "Ogygia",         type: "Place", group: "place" },
+  { name: "Ithaca",         type: "Place", group: "place" },
+  { name: "Matt Damon",           type: "Actor", group: "actor" },
+  { name: "Anne Hathaway",        type: "Actor", group: "actor" },
+  { name: "Jorge Rivera-Herrans", type: "Actor", group: "actor" },
+];
+
+// One entry per relationship, read aloud as a sentence:
+//   s = subject (arrow starts here), o = object (arrow points here),
+//   rel = the relationship type, cat = its family (decides curve colour).
+// Exactly Cypher's (s)-[:REL]->(o), flattened into a list.
+const links = [
+  { s: "Odysseus",   o: "Penelope",   rel: "MARRIED_TO", cat: "story" },
+  { s: "Telemachus", o: "Odysseus",   rel: "CHILD_OF",   cat: "story" },
+  { s: "Telemachus", o: "Penelope",   rel: "CHILD_OF",   cat: "story" },
+  { s: "Athena",     o: "Odysseus",   rel: "MENTORS",    cat: "story" },
+  { s: "Odysseus",   o: "Polyphemus", rel: "BLINDS",     cat: "story" },
+  { s: "Poseidon",   o: "Odysseus",   rel: "CURSES",     cat: "story" },
+  { s: "Calypso",    o: "Odysseus",   rel: "DETAINS",    cat: "story" },
+  { s: "Circe",      o: "Odysseus",   rel: "HELPS",      cat: "story" },
+  { s: "Just a Man",       o: "Odysseus", rel: "FEATURES", cat: "features" },
+  { s: "Full Speed Ahead", o: "Odysseus", rel: "FEATURES", cat: "features" },
+  { s: "Ruthlessness",     o: "Poseidon", rel: "FEATURES", cat: "features" },
+  { s: "Done For",         o: "Circe",    rel: "FEATURES", cat: "features" },
+  { s: "Love in Paradise", o: "Calypso",  rel: "FEATURES", cat: "features" },
+  { s: "Love in Paradise", o: "Odysseus", rel: "FEATURES", cat: "features" },
+  { s: "Would You Fall in Love with Me Again", o: "Penelope", rel: "FEATURES", cat: "features" },
+  { s: "Would You Fall in Love with Me Again", o: "Odysseus", rel: "FEATURES", cat: "features" },
+  { s: "Circe",      o: "Aeaea",          rel: "LIVES_IN", cat: "dwells" },
+  { s: "Calypso",    o: "Ogygia",         rel: "LIVES_IN", cat: "dwells" },
+  { s: "Polyphemus", o: "Cyclops Island", rel: "LIVES_IN", cat: "dwells" },
+  { s: "Odysseus",   o: "Ithaca",         rel: "RULES",    cat: "dwells" },
+  { s: "Penelope",   o: "Ithaca",         rel: "LIVES_IN", cat: "dwells" },
+  { s: "Troy",           o: "Cyclops Island", rel: "TRAVELS_TO", cat: "journey" },
+  { s: "Cyclops Island", o: "Aeaea",          rel: "TRAVELS_TO", cat: "journey" },
+  { s: "Aeaea",          o: "Ogygia",         rel: "TRAVELS_TO", cat: "journey" },
+  { s: "Ogygia",         o: "Ithaca",         rel: "TRAVELS_TO", cat: "journey" },
+  { s: "Matt Damon",           o: "Odysseus", rel: "PLAYS", cat: "plays" },
+  { s: "Anne Hathaway",        o: "Penelope", rel: "PLAYS", cat: "plays" },
+  { s: "Jorge Rivera-Herrans", o: "Odysseus", rel: "PLAYS", cat: "plays" },
+];
+
+// How to read each relationship aloud, in both directions.
+// FWD = when the hovered node is the subject; REV = when it's the object.
+const FWD = { MARRIED_TO: "married to", CHILD_OF: "child of", MENTORS: "mentors",
+  BLINDS: "blinds", CURSES: "curses", DETAINS: "detains", HELPS: "helps",
+  FEATURES: "features", LIVES_IN: "lives in", RULES: "rules",
+  TRAVELS_TO: "sails to", PLAYS: "plays" };
+const REV = { MARRIED_TO: "married to", CHILD_OF: "parent of", MENTORS: "mentored by",
+  BLINDS: "blinded by", CURSES: "cursed by", DETAINS: "detained by", HELPS: "helped by",
+  FEATURES: "appears in", LIVES_IN: "home of", RULES: "ruled by",
+  TRAVELS_TO: "reached from", PLAYS: "played by" };
+
+// ════════════════════════════ 2. THE DIALS ════════════════════════════
+// Numbers and colours you're invited to change. Nothing here can break
+// the maths - the engine reads these and adapts.
+
+// One entry per axis: its direction, length (r1), colour, and label.
+// Directions are compass points:  -Math.PI/2 up · 0 right · Math.PI/2 down · Math.PI left
+const AXES = {
+  character: { a: -Math.PI / 2, r1: 360, color: "#d9f24b", label: "CHARACTERS" },
+  song:      { a: 0,            r1: 400, color: "#e88fb0", label: "SONGS" },
+  place:     { a: Math.PI / 2,  r1: 360, color: "#7fd6d4", label: "PLACES" },
+  actor:     { a: Math.PI,      r1: 400, color: "#ffffff", label: "ACTORS" },
+};
+
+const R0 = 70;         // hole in the middle (axes start this far from centre)
+const MAGNET = 0.72;   // curve bend: 0 = straight lines, 1 = slams into centre
+
+const COLOR = {        // dot colour per node TYPE
+  Hero: "#f0c94f", Mortal: "#d9f24b", Deity: "#9ee7e4", Monster: "#e8604c",
+  Song: "#e88fb0", Place: "#7fd6d4", Actor: "#ffffff",
+};
+
+const STYLE = {        // curve colour + thickness per link CATEGORY
+  story:    { stroke: "rgba(217,242,75,.75)",  width: 1.2 },
+  features: { stroke: "rgba(232,143,176,.55)", width: 1.1 },
+  dwells:   { stroke: "rgba(127,214,212,.8)",  width: 1.2 },
+  journey:  { stroke: "#f0c94f",               width: 2.4 },
+  plays:    { stroke: "rgba(255,255,255,.6)",  width: 1.1 },
+};
+
+const LABEL_MIN_DEG = 3;   // nodes with this many links (or more) get a label
+const DOT_MIN = 4, DOT_GROW = 2.5;   // dot size: DOT_MIN + sqrt(links) * DOT_GROW
+
+// ═══════════════════════════ 3. THE ENGINE ═══════════════════════════
+// The maths lives here. It reads your data and your dials, and draws.
+// You never need to edit below this line.
+
+const W = 900, H = 900, CX = W / 2, CY = H / 2;
+const svg = d3.select("#chart");
+
+// bookkeeping: each node learns its position, axis size, and link count
+const byGroup = {};
+nodes.forEach(n => (byGroup[n.group] ??= []).push(n));
+Object.values(byGroup).forEach(list =>
+  list.forEach((n, i) => { n.pos = i; n.axisN = list.length; }));
+nodes.forEach(n =>
+  n.deg = links.filter(l => l.s === n.name || l.o === n.name).length);
+
+// place every node along its axis
+nodes.forEach(n => {
+  const ax = AXES[n.group];
+  const t = n.axisN > 1 ? n.pos / (n.axisN - 1) : 0.5;
+  const r = R0 + t * (ax.r1 - R0);
+  n.x = CX + r * Math.cos(ax.a);
+  n.y = CY + r * Math.sin(ax.a);
+});
+
+// axis lines + labels
+Object.values(AXES).forEach(ax => {
+  svg.append("line")
+    .attr("x1", CX + R0 * Math.cos(ax.a)).attr("y1", CY + R0 * Math.sin(ax.a))
+    .attr("x2", CX + (ax.r1 + 14) * Math.cos(ax.a))
+    .attr("y2", CY + (ax.r1 + 14) * Math.sin(ax.a))
+    .attr("stroke", "rgba(244,234,217,.25)").attr("stroke-width", 1.5);
+  svg.append("text")
+    .attr("x", CX + (ax.r1 + 44) * Math.cos(ax.a))
+    .attr("y", CY + (ax.r1 + 44) * Math.sin(ax.a))
+    .attr("text-anchor", "middle").attr("fill", ax.color)
+    .attr("font-size", 13).attr("font-weight", 700).attr("font-family", "sans-serif")
+    .text(ax.label);
+});
+
+// curves (drawn first, so they sit under the dots)
+const byName = new Map(nodes.map(n => [n.name, n]));
+function linkPath(l) {
+  const a = byName.get(l.s), b = byName.get(l.o);
+  if (a.group === b.group) {
+    const mx = (a.x + b.x) / 2 + 36, my = (a.y + b.y) / 2 + 36;
+    return `M${a.x},${a.y} Q${mx},${my} ${b.x},${b.y}`;
+  }
+  const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+  const m = { x: mid.x + (CX - mid.x) * MAGNET, y: mid.y + (CY - mid.y) * MAGNET };
+  return `M${a.x},${a.y} Q${m.x},${m.y} ${b.x},${b.y}`;
+}
+const curves = svg.append("g").selectAll("path")
+  .data(links).join("path")
+  .attr("d", linkPath).attr("fill", "none")
+  .attr("stroke", l => STYLE[l.cat].stroke)
+  .attr("stroke-width", l => STYLE[l.cat].width);
+
+// dots, sized by connection count
+const dots = svg.append("g").selectAll("circle")
+  .data(nodes).join("circle")
+  .attr("cx", n => n.x).attr("cy", n => n.y)
+  .attr("r", n => DOT_MIN + Math.sqrt(n.deg) * DOT_GROW)
+  .attr("fill", n => COLOR[n.type])
+  .attr("stroke", "#0e2836").attr("stroke-width", 1.5)
+  .style("cursor", "pointer");
+
+// labels for the busy nodes (and all places)
+svg.append("g").selectAll("text")
+  .data(nodes.filter(n => n.deg >= LABEL_MIN_DEG || n.group === "place"))
+  .join("text")
+  .attr("x", n => n.x + 12).attr("y", n => n.y - 8)
+  .attr("fill", "rgba(244,234,217,.85)")
+  .attr("font-size", 11).attr("font-family", "sans-serif")
+  .text(n => n.name);
+
+// the spotlight: hover a node, its world stays bright, the rest fades
+const friends = new Map(nodes.map(n => [n.name, new Set([n.name])]));
+links.forEach(l => { friends.get(l.s).add(l.o); friends.get(l.o).add(l.s); });
+
+function describe(n) {
+  return links
+    .filter(l => l.s === n.name || l.o === n.name)
+    .map(l => l.s === n.name ? `${FWD[l.rel]} ${l.o}` : `${REV[l.rel]} ${l.s}`)
+    .join(" · ");
+}
+
+const tip = d3.select("#tip");
+dots.on("mouseover", (event, n) => {
+    const keep = friends.get(n.name);
+    dots.transition().duration(120)
+      .attr("opacity", d => keep.has(d.name) ? 1 : 0.12);
+    curves.transition().duration(120)
+      .attr("stroke-opacity", l => (l.s === n.name || l.o === n.name) ? 1 : 0.05)
+      .attr("stroke-width", l => (l.s === n.name || l.o === n.name)
+        ? STYLE[l.cat].width + 1 : STYLE[l.cat].width);
+  })
+  .on("mousemove", (event, n) => {
+    tip.style("opacity", 1)
+       .style("left", (event.pageX + 14) + "px")
+       .style("top", (event.pageY - 10) + "px")
+       .html(`<b>${n.name}</b><br><small>${n.type}</small><br>${describe(n)}`);
+  })
+  .on("mouseout", () => {
+    tip.style("opacity", 0);
+    dots.transition().duration(160).attr("opacity", 1);
+    curves.transition().duration(160)
+      .attr("stroke-opacity", 1)
+      .attr("stroke-width", l => STYLE[l.cat].width);
+  });
+
+// toys: actor photos from Wikipedia (fails gracefully to plain dots)
+nodes.filter(n => n.group === "actor").forEach((n, i) => {
+  fetch("https://en.wikipedia.org/api/rest_v1/page/summary/" +
+        encodeURIComponent(n.name.replace(/ /g, "_")))
+    .then(r => r.ok ? r.json() : null)
+    .then(j => {
+      if (!j || !j.thumbnail) return;
+      svg.append("clipPath").attr("id", "actor-clip-" + i)
+        .append("circle").attr("cx", n.x).attr("cy", n.y).attr("r", 14);
+      svg.append("image")
+        .attr("href", j.thumbnail.source)
+        .attr("x", n.x - 14).attr("y", n.y - 14)
+        .attr("width", 28).attr("height", 28)
+        .attr("preserveAspectRatio", "xMidYMid slice")
+        .attr("clip-path", `url(#actor-clip-${i})`);
+    })
+    .catch(() => {});
+});
+
+// toys: singing nodes - 30s previews from the iTunes Search API
+const audio = new Audio();
+dots.filter(n => n.group === "song")
+  .on("mouseenter.song", (event, n) => {
+    fetch("https://itunes.apple.com/search?media=music&limit=12&term=" +
+          encodeURIComponent(n.name + " EPIC The Musical"))
+      .then(r => r.json())
+      .then(j => {
+        const hit = (j.results || []).find(t =>
+          t.previewUrl &&
+          t.trackName.toLowerCase().startsWith(n.name.toLowerCase()) &&
+          (t.artistName || "").toLowerCase().includes("jorge rivera"));
+        if (hit) { audio.src = hit.previewUrl; audio.play().catch(() => {}); }
+      });
+  })
+  .on("mouseleave.song", () => audio.pause());
+</script>
+</body>
+</html>

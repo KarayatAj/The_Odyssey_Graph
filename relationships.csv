@@ -1,0 +1,236 @@
+from,to,type,detail,source
+Telemachus,Odysseus,CHILD_OF,,Homer / Theoi.com; optionally Wikidata SPARQL (P22/P25/P26 family properties)
+Telemachus,Penelope,CHILD_OF,,Homer / Theoi.com; optionally Wikidata SPARQL (P22/P25/P26 family properties)
+Odysseus,Anticlea,CHILD_OF,,Homer / Theoi.com; optionally Wikidata SPARQL (P22/P25/P26 family properties)
+Odysseus,Laertes,CHILD_OF,,Homer / Theoi.com; optionally Wikidata SPARQL (P22/P25/P26 family properties)
+Polyphemus,Poseidon,CHILD_OF,,Homer / Theoi.com; optionally Wikidata SPARQL (P22/P25/P26 family properties)
+Odysseus,Penelope,MARRIED_TO,,Homer / Theoi.com; optionally Wikidata SPARQL (P22/P25/P26 family properties)
+Helen of Troy,Menelaus,MARRIED_TO,,Homer / Theoi.com; optionally Wikidata SPARQL (P22/P25/P26 family properties)
+Clytemnestra,Agamemnon,MARRIED_TO,,Homer / Theoi.com; optionally Wikidata SPARQL (P22/P25/P26 family properties)
+Helen of Troy,Clytemnestra,SIBLING_OF,,Homer / Theoi.com; optionally Wikidata SPARQL (P22/P25/P26 family properties)
+Menelaus,Agamemnon,SIBLING_OF,,Homer / Theoi.com; optionally Wikidata SPARQL (P22/P25/P26 family properties)
+Eurylochus,Odysseus,IN_LAW_OF,Married to Odysseus's sister Ctimene,Homer / Theoi.com; optionally Wikidata SPARQL (P22/P25/P26 family properties)
+Athena,Odysseus,MENTORS,Warrior of the Mind; broken in My Goodbye; restored in I Can't Help but Wonder,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Athena,Telemachus,MENTORS,The Wisdom Saga; Homer Books 1-3,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Poseidon,Odysseus,OPPOSES,Ten years of vengeance for the blinding of his son,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Odysseus,Polyphemus,BLINDS,The wooden spike; Remember Them,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Polyphemus,Odysseus,CURSES,Prays to Poseidon for revenge,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Circe,Odysseus,OPPOSES,Turns his scouting party into swine; Puppeteer,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Circe,Odysseus,HELPS,Relents; points the way onward; There Are Other Ways,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Hermes,Odysseus,HELPS,The moly herb; later the way off Ogygia,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Calypso,Odysseus,DETAINS,Seven years on Ogygia,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Aeolus,Odysseus,HELPS,The bag of winds,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Zeus,Odysseus,PUNISHES,Lightning destroys the last ship; Thunder Bringer,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Eurylochus,Odysseus,BETRAYS,Opens the wind bag; leads the mutiny on Thrinacia,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Eurylochus,Helios,OFFENDS,Slaughters the sacred cattle,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Sirens,Odysseus,TEMPTS,Wearing Penelope's voice in EPIC,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Scylla,Odysseus,ATTACKS,Takes six men - the six torches,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Charybdis,Odysseus,ATTACKS,The whirlpool; survived alone,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Tiresias,Odysseus,PROPHESIES_TO,No Longer You; Homer Book 11,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Antinous,Penelope,WOOS,,Homer's Odyssey (Wilson translation); cross-check Theoi.com
+Eurymachus,Penelope,WOOS,,Homer's Odyssey (Wilson translation); cross-check Theoi.com
+Amphinomus,Penelope,WOOS,,Homer's Odyssey (Wilson translation); cross-check Theoi.com
+Antinous,Telemachus,THREATENS,Little Wolf; the suitors' plot,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Odysseus,Antinous,KILLS,First arrow of the reckoning,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Eumaeus,Odysseus,HELPS,Shelters the disguised king,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Eurycleia,Odysseus,RECOGNISES,By the scar; Homer Book 19,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Argos,Odysseus,RECOGNISES,The dog knows him at once; Homer Book 17,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Melantho,Antinous,ALLIES_WITH,Disloyal to Penelope,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Odysseus,Ithaca,RULES,,Homer's Odyssey (Wilson translation); cross-check Theoi.com
+Penelope,Ithaca,RULES,,Homer's Odyssey (Wilson translation); cross-check Theoi.com
+Polyphemus,Cyclops Island,LIVES_IN,,Homer's Odyssey (Wilson translation); cross-check Theoi.com
+Circe,Aeaea,LIVES_IN,,Homer's Odyssey (Wilson translation); cross-check Theoi.com
+Calypso,Ogygia,LIVES_IN,,Homer's Odyssey (Wilson translation); cross-check Theoi.com
+Aeolus,Aeolia,LIVES_IN,,Homer's Odyssey (Wilson translation); cross-check Theoi.com
+Sirens,Sirens' Strait,LIVES_IN,,Homer's Odyssey (Wilson translation); cross-check Theoi.com
+Scylla,Strait of Scylla and Charybdis,LIVES_IN,,Homer's Odyssey (Wilson translation); cross-check Theoi.com
+Charybdis,Strait of Scylla and Charybdis,LIVES_IN,,Homer's Odyssey (Wilson translation); cross-check Theoi.com
+Helios,Thrinacia,KEEPS_CATTLE_ON,The sacred herd,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Lotus Eaters,Lotus Eaters' Island,LIVES_IN,,Homer's Odyssey (Wilson translation); cross-check Theoi.com
+Tiresias,The Underworld,LIVES_IN,His shade at least,Homer's Odyssey (Wilson translation); cross-check Theoi.com; EPIC where the detail says so
+Troy,Ismarus,TRAVELS_TO,stop 1; Homer only - EPIC skips this leg,Homer's Odyssey Books 9-13 for order; EPIC saga sequence for the musical's route
+Ismarus,Lotus Eaters' Island,TRAVELS_TO,stop 2; Homer only - EPIC skips this leg,Homer's Odyssey Books 9-13 for order; EPIC saga sequence for the musical's route
+Lotus Eaters' Island,Cyclops Island,TRAVELS_TO,stop 3,Homer's Odyssey Books 9-13 for order; EPIC saga sequence for the musical's route
+Cyclops Island,Aeolia,TRAVELS_TO,stop 4,Homer's Odyssey Books 9-13 for order; EPIC saga sequence for the musical's route
+Aeolia,Laestrygonia,TRAVELS_TO,stop 5; Homer only - EPIC skips this leg,Homer's Odyssey Books 9-13 for order; EPIC saga sequence for the musical's route
+Laestrygonia,Aeaea,TRAVELS_TO,stop 6; Homer only - EPIC skips this leg,Homer's Odyssey Books 9-13 for order; EPIC saga sequence for the musical's route
+Aeaea,The Underworld,TRAVELS_TO,stop 7,Homer's Odyssey Books 9-13 for order; EPIC saga sequence for the musical's route
+The Underworld,Sirens' Strait,TRAVELS_TO,stop 8,Homer's Odyssey Books 9-13 for order; EPIC saga sequence for the musical's route
+Sirens' Strait,Strait of Scylla and Charybdis,TRAVELS_TO,stop 9,Homer's Odyssey Books 9-13 for order; EPIC saga sequence for the musical's route
+Strait of Scylla and Charybdis,Thrinacia,TRAVELS_TO,stop 10,Homer's Odyssey Books 9-13 for order; EPIC saga sequence for the musical's route
+Thrinacia,Ogygia,TRAVELS_TO,stop 11,Homer's Odyssey Books 9-13 for order; EPIC saga sequence for the musical's route
+Ogygia,Scheria,TRAVELS_TO,stop 12; Homer only - EPIC skips this leg,Homer's Odyssey Books 9-13 for order; EPIC saga sequence for the musical's route
+Scheria,Ithaca,TRAVELS_TO,stop 13; Homer only - EPIC skips this leg,Homer's Odyssey Books 9-13 for order; EPIC saga sequence for the musical's route
+The Horse and the Infant,The Troy Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+The Horse and the Infant,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+The Horse and the Infant,Zeus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Just a Man,The Troy Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Just a Man,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Full Speed Ahead,The Troy Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Full Speed Ahead,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Full Speed Ahead,Eurylochus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Full Speed Ahead,Polites,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Open Arms,The Troy Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Open Arms,Polites,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Open Arms,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Open Arms,Lotus Eaters,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Warrior of the Mind,The Troy Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Warrior of the Mind,Athena,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Warrior of the Mind,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Polyphemus (song),The Cyclops Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Polyphemus (song),Polyphemus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Polyphemus (song),Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Polyphemus (song),Polites,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Polyphemus (song),Eurylochus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Survive,The Cyclops Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Survive,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Survive,Polyphemus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Survive,Polites,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Remember Them,The Cyclops Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Remember Them,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Remember Them,Polyphemus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Remember Them,Eurylochus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+My Goodbye,The Cyclops Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+My Goodbye,Athena,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+My Goodbye,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Storm,The Ocean Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Storm,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Storm,Eurylochus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Luck Runs Out,The Ocean Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Luck Runs Out,Eurylochus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Luck Runs Out,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Keep Your Friends Close,The Ocean Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Keep Your Friends Close,Aeolus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Keep Your Friends Close,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Keep Your Friends Close,Eurylochus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Ruthlessness,The Ocean Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Ruthlessness,Poseidon,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Ruthlessness,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Puppeteer,The Circe Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Puppeteer,Circe,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Puppeteer,Eurylochus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Puppeteer,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Wouldn't You Like,The Circe Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Wouldn't You Like,Hermes,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Wouldn't You Like,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Done For,The Circe Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Done For,Circe,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Done For,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+There Are Other Ways,The Circe Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+There Are Other Ways,Circe,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+There Are Other Ways,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+The Underworld (song),The Underworld Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+The Underworld (song),Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+The Underworld (song),Anticlea,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+The Underworld (song),Polites,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+No Longer You,The Underworld Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+No Longer You,Tiresias,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+No Longer You,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Monster,The Underworld Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Monster,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Suffering,The Thunder Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Suffering,Sirens,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Suffering,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Different Beast,The Thunder Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Different Beast,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Different Beast,Sirens,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Scylla (song),The Thunder Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Scylla (song),Scylla,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Scylla (song),Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Scylla (song),Eurylochus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Mutiny,The Thunder Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Mutiny,Eurylochus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Mutiny,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Mutiny,Helios,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Thunder Bringer,The Thunder Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Thunder Bringer,Zeus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Thunder Bringer,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Thunder Bringer,Eurylochus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Legendary,The Wisdom Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Legendary,Telemachus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Legendary,Athena,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Little Wolf,The Wisdom Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Little Wolf,Telemachus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Little Wolf,Antinous,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Little Wolf,Athena,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+We'll Be Fine,The Wisdom Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+We'll Be Fine,Athena,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+We'll Be Fine,Telemachus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+We'll Be Fine,Penelope,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Love in Paradise,The Wisdom Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Love in Paradise,Calypso,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Love in Paradise,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+God Games,The Wisdom Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+God Games,Athena,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+God Games,Zeus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+God Games,Apollo,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+God Games,Hephaestus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+God Games,Aphrodite,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+God Games,Ares,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+God Games,Hera,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Not Sorry for Loving You,The Vengeance Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Not Sorry for Loving You,Calypso,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Not Sorry for Loving You,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Dangerous,The Vengeance Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Dangerous,Hermes,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Dangerous,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Charybdis (song),The Vengeance Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Charybdis (song),Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Charybdis (song),Charybdis,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Get in the Water,The Vengeance Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Get in the Water,Poseidon,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Get in the Water,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Six Hundred Strike,The Vengeance Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Six Hundred Strike,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Six Hundred Strike,Poseidon,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+The Challenge,The Ithaca Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+The Challenge,Penelope,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+The Challenge,Antinous,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+The Challenge,Telemachus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Hold Them Down,The Ithaca Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Hold Them Down,Antinous,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Hold Them Down,Telemachus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Hold Them Down,Eurymachus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Hold Them Down,Amphinomus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Odysseus (song),The Ithaca Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Odysseus (song),Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Odysseus (song),Antinous,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+I Can't Help but Wonder,The Ithaca Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+I Can't Help but Wonder,Athena,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+I Can't Help but Wonder,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Would You Fall in Love with Me Again,The Ithaca Saga,PART_OF,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Would You Fall in Love with Me Again,Odysseus,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Would You Fall in Love with Me Again,Penelope,FEATURES,,EPIC: The Musical official albums; Wikipedia track list - verify by listening
+Matt Damon,Odysseus,PLAYS,production: film (The Odyssey 2026),Wikipedia + Rotten Tomatoes: The Odyssey (2026 film) - checked 6 Jul 2026
+Anne Hathaway,Penelope,PLAYS,production: film (The Odyssey 2026),Wikipedia + Rotten Tomatoes: The Odyssey (2026 film) - checked 6 Jul 2026
+Tom Holland,Telemachus,PLAYS,production: film (The Odyssey 2026),Wikipedia + Rotten Tomatoes: The Odyssey (2026 film) - checked 6 Jul 2026
+Robert Pattinson,Antinous,PLAYS,production: film (The Odyssey 2026),Wikipedia + Rotten Tomatoes: The Odyssey (2026 film) - checked 6 Jul 2026
+Zendaya,Athena,PLAYS,production: film (The Odyssey 2026),Wikipedia + Rotten Tomatoes: The Odyssey (2026 film) - checked 6 Jul 2026
+Charlize Theron,Calypso,PLAYS,production: film (The Odyssey 2026),Wikipedia + Rotten Tomatoes: The Odyssey (2026 film) - checked 6 Jul 2026
+Lupita Nyong'o,Helen of Troy,PLAYS,production: film (The Odyssey 2026),Wikipedia + Rotten Tomatoes: The Odyssey (2026 film) - checked 6 Jul 2026
+Lupita Nyong'o,Clytemnestra,PLAYS,production: film (The Odyssey 2026),Wikipedia + Rotten Tomatoes: The Odyssey (2026 film) - checked 6 Jul 2026
+Samantha Morton,Circe,PLAYS,production: film (The Odyssey 2026),Wikipedia + Rotten Tomatoes: The Odyssey (2026 film) - checked 6 Jul 2026
+Bill Irwin,Polyphemus,PLAYS,production: film (The Odyssey 2026),Wikipedia + Rotten Tomatoes: The Odyssey (2026 film) - checked 6 Jul 2026
+John Leguizamo,Eumaeus,PLAYS,production: film (The Odyssey 2026),Wikipedia + Rotten Tomatoes: The Odyssey (2026 film) - checked 6 Jul 2026
+Jon Bernthal,Menelaus,PLAYS,production: film (The Odyssey 2026),Wikipedia + Rotten Tomatoes: The Odyssey (2026 film) - checked 6 Jul 2026
+Benny Safdie,Agamemnon,PLAYS,production: film (The Odyssey 2026),Wikipedia + Rotten Tomatoes: The Odyssey (2026 film) - checked 6 Jul 2026
+Himesh Patel,Eurylochus,PLAYS,production: film (The Odyssey 2026),Wikipedia + Rotten Tomatoes: The Odyssey (2026 film) - checked 6 Jul 2026
+Mia Goth,Melantho,PLAYS,production: film (The Odyssey 2026),Wikipedia + Rotten Tomatoes: The Odyssey (2026 film) - checked 6 Jul 2026
+Jorge Rivera-Herrans,Odysseus,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Jorge Rivera-Herrans,Polyphemus,PLAYS,production: musical (EPIC); Also voices Polyphemus and ensemble,IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Anna Lea,Penelope,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Anna Lea,Sirens,PLAYS,production: musical (EPIC); Doubles as the Sirens - deliberate casting twist,IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Miguel Veloso,Telemachus,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Teagan Earley,Athena,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Steven Rodriguez,Poseidon,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Luke Holt,Zeus,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Luke Holt,Elpenor,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Armando Julián,Eurylochus,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Steven Dookie,Polites,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Talya Sindel,Circe,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Barbara Wangui,Calypso,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Troy Doherty,Hermes,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Ayron Alexander,Antinous,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Ayron Alexander,Perimedes,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+KJ Burkhauser,Scylla,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026
+Kira Stone,Aeolus,PLAYS,production: musical (EPIC),IMDb + BroadwayWorld: EPIC The Musical cast - checked 6 Jul 2026

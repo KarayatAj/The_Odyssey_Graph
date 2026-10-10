@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Odyssey, on the Hive</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#0e2836; color:#f4ead9; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; }
+  header { text-align:center; padding:32px 20px 6px; }
+  h1 { font-size:34px; letter-spacing:-.01em; }
+  h1 .accent { color:#d9f24b; }
+  .sub { color:rgba(244,234,217,.65); font-size:14px; margin-top:8px; max-width:680px; line-height:1.55; }
+  .controls { display:flex; gap:18px; flex-wrap:wrap; justify-content:center; align-items:center; padding:12px 20px 0; font-size:12.5px; color:rgba(244,234,217,.8); }
+  .controls span { display:inline-flex; align-items:center; gap:6px; }
+  .sw { width:18px; height:3px; border-radius:2px; display:inline-block; }
+  .dotsw { width:9px; height:9px; border-radius:50%; display:inline-block; }
+  #soundBtn {
+    border:1.5px solid rgba(244,234,217,.4); background:transparent; color:#f4ead9;
+    border-radius:18px; padding:6px 14px; font-size:12.5px; font-weight:700; cursor:pointer; font-family:inherit;
+  }
+  #soundBtn.on { background:#e88fb0; border-color:#e88fb0; color:#16323f; }
+  #chart { position:relative; width:100%; display:flex; justify-content:center; }
+  #chart svg { width:min(97vw, 1760px); height:auto; }
+  #tooltip {
+    position:absolute; pointer-events:none; background:#f4ead9; color:#16323f;
+    border-radius:10px; padding:10px 13px; font-size:13px; max-width:330px;
+    opacity:0; transition:opacity .12s; box-shadow:0 6px 24px rgba(0,0,0,.4); line-height:1.45; z-index:5;
+  }
+  #tooltip .line { display:block; margin-top:4px; }
+  #tooltip .note { display:block; margin-top:4px; font-style:italic; color:#0f4d5f; }
+  #tooltip b { font-size:14px; }
+  #tooltip .t { color:#0f4d5f; font-weight:700; font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; }
+  #tooltip .play { color:#b0316a; font-weight:700; }
+  footer { color:rgba(244,234,217,.45); font-size:11.5px; padding:10px 20px 28px; text-align:center; line-height:1.6; }
+  footer a { color:#7fd6d4; }
+</style>
+</head>
+<body>
+<header>
+  <h1>The Odyssey, <span class="accent">on the hive</span></h1>
+  <div class="sub">One story, three tellings: Homer's poem, EPIC: The Musical, and Christopher Nolan's 2026 film.
+  Each node type lives on its own axis, and every curve is a relationship from a Neo4j graph, drawn with d3.
+  The gold chain down the Places axis is Odysseus's voyage from Troy home to Ithaca.
+  <b>Hover anything for more, and turn on song previews to hear the musical.</b></div>
+</header>
+<div class="controls">
+  <button id="soundBtn">🔇 song previews: off</button>
+  <span><i class="dotsw" style="background:#d9f24b"></i> characters</span>
+  <span><i class="dotsw" style="background:#e88fb0"></i> songs</span>
+  <span><i class="dotsw" style="background:#7fd6d4"></i> places</span>
+  <span><i class="dotsw" style="background:#ffffff"></i> actors</span>
+  <span><i class="sw" style="background:#f0c94f"></i> the voyage</span>
+  <span><i class="sw" style="background:rgba(217,242,75,.8)"></i> story</span>
+  <span><i class="sw" style="background:rgba(232,143,176,.8)"></i> features in song</span>
+  <span><i class="sw" style="background:rgba(255,255,255,.7)"></i> played by</span>
+  <span><i class="sw" style="background:rgba(127,214,212,.8)"></i> lives in</span>
+</div>
+<div id="chart"><div id="tooltip"></div></div>
+<footer>By Kemi Elizabeth Ojogbede · Data: <a href="https://github.com/Kemi-Elizabeth/odyssey_graph">github.com/Kemi-Elizabeth/odyssey_graph</a> · built with Neo4j + d3 · actor photos live from Wikipedia · 30s song previews via the iTunes Search API<br>a hive plot after Krzywinski (and Max De Marzi, 2012)</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+<script>
+const data = {"nodes": [{"name": "Odysseus", "type": "Hero", "group": "character", "pos": 38, "axisN": 39, "deg": 61}, {"name": "Penelope", "type": "Mortal", "group": "character", "pos": 35, "axisN": 39, "deg": 11}, {"name": "Telemachus", "type": "Mortal", "group": "character", "pos": 36, "axisN": 39, "deg": 11}, {"name": "Anticlea", "type": "Mortal", "group": "character", "pos": 11, "axisN": 39, "deg": 2}, {"name": "Laertes", "type": "Mortal", "group": "character", "pos": 8, "axisN": 39, "deg": 1}, {"name": "Eurylochus", "type": "Mortal", "group": "character", "pos": 37, "axisN": 39, "deg": 15}, {"name": "Polites", "type": "Mortal", "group": "character", "pos": 29, "axisN": 39, "deg": 6}, {"name": "Elpenor", "type": "Mortal", "group": "character", "pos": 4, "axisN": 39, "deg": 1}, {"name": "Perimedes", "type": "Mortal", "group": "character", "pos": 9, "axisN": 39, "deg": 1}, {"name": "Eumaeus", "type": "Mortal", "group": "character", "pos": 12, "axisN": 39, "deg": 2}, {"name": "Eurycleia", "type": "Mortal", "group": "character", "pos": 5, "axisN": 39, "deg": 1}, {"name": "Antinous", "type": "Mortal", "group": "character", "pos": 33, "axisN": 39, "deg": 10}, {"name": "Eurymachus", "type": "Mortal", "group": "character", "pos": 13, "axisN": 39, "deg": 2}, {"name": "Amphinomus", "type": "Mortal", "group": "character", "pos": 10, "axisN": 39, "deg": 2}, {"name": "Melantho", "type": "Mortal", "group": "character", "pos": 15, "axisN": 39, "deg": 2}, {"name": "Tiresias", "type": "Mortal", "group": "character", "pos": 22, "axisN": 39, "deg": 3}, {"name": "Agamemnon", "type": "Hero", "group": "character", "pos": 16, "axisN": 39, "deg": 3}, {"name": "Menelaus", "type": "Hero", "group": "character", "pos": 21, "axisN": 39, "deg": 3}, {"name": "Helen of Troy", "type": "Mortal", "group": "character", "pos": 19, "axisN": 39, "deg": 3}, {"name": "Clytemnestra", "type": "Mortal", "group": "character", "pos": 18, "axisN": 39, "deg": 3}, {"name": "Argos", "type": "Animal", "group": "character", "pos": 3, "axisN": 39, "deg": 1}, {"name": "Athena", "type": "Deity", "group": "character", "pos": 34, "axisN": 39, "deg": 11}, {"name": "Zeus", "type": "Deity", "group": "character", "pos": 27, "axisN": 39, "deg": 5}, {"name": "Poseidon", "type": "Deity", "group": "character", "pos": 30, "axisN": 39, "deg": 6}, {"name": "Hermes", "type": "Deity", "group": "character", "pos": 24, "axisN": 39, "deg": 4}, {"name": "Circe", "type": "Deity", "group": "character", "pos": 31, "axisN": 39, "deg": 8}, {"name": "Calypso", "type": "Deity", "group": "character", "pos": 28, "axisN": 39, "deg": 6}, {"name": "Aeolus", "type": "Deity", "group": "character", "pos": 23, "axisN": 39, "deg": 4}, {"name": "Helios", "type": "Deity", "group": "character", "pos": 20, "axisN": 39, "deg": 3}, {"name": "Apollo", "type": "Deity", "group": "character", "pos": 1, "axisN": 39, "deg": 1}, {"name": "Aphrodite", "type": "Deity", "group": "character", "pos": 0, "axisN": 39, "deg": 1}, {"name": "Ares", "type": "Deity", "group": "character", "pos": 2, "axisN": 39, "deg": 1}, {"name": "Hera", "type": "Deity", "group": "character", "pos": 7, "axisN": 39, "deg": 1}, {"name": "Hephaestus", "type": "Deity", "group": "character", "pos": 6, "axisN": 39, "deg": 1}, {"name": "Polyphemus", "type": "Monster", "group": "character", "pos": 32, "axisN": 39, "deg": 9}, {"name": "Scylla", "type": "Monster", "group": "character", "pos": 25, "axisN": 39, "deg": 4}, {"name": "Charybdis", "type": "Monster", "group": "character", "pos": 17, "axisN": 39, "deg": 3}, {"name": "Sirens", "type": "Monster", "group": "character", "pos": 26, "axisN": 39, "deg": 5}, {"name": "Lotus Eaters", "type": "Monster", "group": "character", "pos": 14, "axisN": 39, "deg": 2}, {"name": "Troy", "type": "Place", "group": "place", "pos": 0, "axisN": 14, "deg": 1}, {"name": "Ismarus", "type": "Place", "group": "place", "pos": 1, "axisN": 14, "deg": 2}, {"name": "Lotus Eaters' Island", "type": "Place", "group": "place", "pos": 2, "axisN": 14, "deg": 3}, {"name": "Cyclops Island", "type": "Place", "group": "place", "pos": 3, "axisN": 14, "deg": 3}, {"name": "Aeolia", "type": "Place", "group": "place", "pos": 4, "axisN": 14, "deg": 3}, {"name": "Laestrygonia", "type": "Place", "group": "place", "pos": 5, "axisN": 14, "deg": 2}, {"name": "Aeaea", "type": "Place", "group": "place", "pos": 6, "axisN": 14, "deg": 3}, {"name": "The Underworld", "type": "Place", "group": "place", "pos": 7, "axisN": 14, "deg": 3}, {"name": "Sirens' Strait", "type": "Place", "group": "place", "pos": 8, "axisN": 14, "deg": 3}, {"name": "Strait of Scylla and Charybdis", "type": "Place", "group": "place", "pos": 9, "axisN": 14, "deg": 4}, {"name": "Thrinacia", "type": "Place", "group": "place", "pos": 10, "axisN": 14, "deg": 3}, {"name": "Ogygia", "type": "Place", "group": "place", "pos": 11, "axisN": 14, "deg": 3}, {"name": "Scheria", "type": "Place", "group": "place", "pos": 12, "axisN": 14, "deg": 2}, {"name": "Ithaca", "type": "Place", "group": "place", "pos": 13, "axisN": 14, "deg": 3}, {"name": "The Horse and the Infant", "type": "Song", "group": "song", "pos": 0, "axisN": 40, "deg": 2}, {"name": "Just a Man", "type": "Song", "group": "song", "pos": 1, "axisN": 40, "deg": 1}, {"name": "Full Speed Ahead", "type": "Song", "group": "song", "pos": 2, "axisN": 40, "deg": 3}, {"name": "Open Arms", "type": "Song", "group": "song", "pos": 3, "axisN": 40, "deg": 3}, {"name": "Warrior of the Mind", "type": "Song", "group": "song", "pos": 4, "axisN": 40, "deg": 2}, {"name": "Polyphemus", "type": "Song", "group": "song", "pos": 5, "axisN": 40, "deg": 4}, {"name": "Survive", "type": "Song", "group": "song", "pos": 6, "axisN": 40, "deg": 3}, {"name": "Remember Them", "type": "Song", "group": "song", "pos": 7, "axisN": 40, "deg": 3}, {"name": "My Goodbye", "type": "Song", "group": "song", "pos": 8, "axisN": 40, "deg": 2}, {"name": "Storm", "type": "Song", "group": "song", "pos": 9, "axisN": 40, "deg": 2}, {"name": "Luck Runs Out", "type": "Song", "group": "song", "pos": 10, "axisN": 40, "deg": 2}, {"name": "Keep Your Friends Close", "type": "Song", "group": "song", "pos": 11, "axisN": 40, "deg": 3}, {"name": "Ruthlessness", "type": "Song", "group": "song", "pos": 12, "axisN": 40, "deg": 2}, {"name": "Puppeteer", "type": "Song", "group": "song", "pos": 13, "axisN": 40, "deg": 3}, {"name": "Wouldn't You Like", "type": "Song", "group": "song", "pos": 14, "axisN": 40, "deg": 2}, {"name": "Done For", "type": "Song", "group": "song", "pos": 15, "axisN": 40, "deg": 2}, {"name": "There Are Other Ways", "type": "Song", "group": "song", "pos": 16, "axisN": 40, "deg": 2}, {"name": "The Underworld", "type": "Song", "group": "song", "pos": 17, "axisN": 40, "deg": 3}, {"name": "No Longer You", "type": "Song", "group": "song", "pos": 18, "axisN": 40, "deg": 2}, {"name": "Monster", "type": "Song", "group": "song", "pos": 19, "axisN": 40, "deg": 1}, {"name": "Suffering", "type": "Song", "group": "song", "pos": 20, "axisN": 40, "deg": 2}, {"name": "Different Beast", "type": "Song", "group": "song", "pos": 21, "axisN": 40, "deg": 2}, {"name": "Scylla", "type": "Song", "group": "song", "pos": 22, "axisN": 40, "deg": 3}, {"name": "Mutiny", "type": "Song", "group": "song", "pos": 23, "axisN": 40, "deg": 3}, {"name": "Thunder Bringer", "type": "Song", "group": "song", "pos": 24, "axisN": 40, "deg": 3}, {"name": "Legendary", "type": "Song", "group": "song", "pos": 25, "axisN": 40, "deg": 2}, {"name": "Little Wolf", "type": "Song", "group": "song", "pos": 26, "axisN": 40, "deg": 3}, {"name": "We'll Be Fine", "type": "Song", "group": "song", "pos": 27, "axisN": 40, "deg": 3}, {"name": "Love in Paradise", "type": "Song", "group": "song", "pos": 28, "axisN": 40, "deg": 2}, {"name": "God Games", "type": "Song", "group": "song", "pos": 29, "axisN": 40, "deg": 7}, {"name": "Not Sorry for Loving You", "type": "Song", "group": "song", "pos": 30, "axisN": 40, "deg": 2}, {"name": "Dangerous", "type": "Song", "group": "song", "pos": 31, "axisN": 40, "deg": 2}, {"name": "Charybdis", "type": "Song", "group": "song", "pos": 32, "axisN": 40, "deg": 2}, {"name": "Get in the Water", "type": "Song", "group": "song", "pos": 33, "axisN": 40, "deg": 2}, {"name": "Six Hundred Strike", "type": "Song", "group": "song", "pos": 34, "axisN": 40, "deg": 2}, {"name": "The Challenge", "type": "Song", "group": "song", "pos": 35, "axisN": 40, "deg": 3}, {"name": "Hold Them Down", "type": "Song", "group": "song", "pos": 36, "axisN": 40, "deg": 4}, {"name": "Odysseus", "type": "Song", "group": "song", "pos": 37, "axisN": 40, "deg": 2}, {"name": "I Can't Help but Wonder", "type": "Song", "group": "song", "pos": 38, "axisN": 40, "deg": 2}, {"name": "Would You Fall in Love with Me Again", "type": "Song", "group": "song", "pos": 39, "axisN": 40, "deg": 2}, {"name": "Matt Damon", "type": "Actor", "group": "actor", "production": "film", "pos": 8, "axisN": 28, "deg": 1}, {"name": "Anne Hathaway", "type": "Actor", "group": "actor", "production": "film", "pos": 0, "axisN": 28, "deg": 1}, {"name": "Tom Holland", "type": "Actor", "group": "actor", "production": "film", "pos": 12, "axisN": 28, "deg": 1}, {"name": "Robert Pattinson", "type": "Actor", "group": "actor", "production": "film", "pos": 10, "axisN": 28, "deg": 1}, {"name": "Zendaya", "type": "Actor", "group": "actor", "production": "film", "pos": 13, "axisN": 28, "deg": 1}, {"name": "Charlize Theron", "type": "Actor", "group": "actor", "production": "film", "pos": 3, "axisN": 28, "deg": 1}, {"name": "Lupita Nyong'o", "type": "Actor", "group": "actor", "production": "film", "pos": 7, "axisN": 28, "deg": 2}, {"name": "Samantha Morton", "type": "Actor", "group": "actor", "production": "film", "pos": 11, "axisN": 28, "deg": 1}, {"name": "Bill Irwin", "type": "Actor", "group": "actor", "production": "film", "pos": 2, "axisN": 28, "deg": 1}, {"name": "John Leguizamo", "type": "Actor", "group": "actor", "production": "film", "pos": 5, "axisN": 28, "deg": 1}, {"name": "Jon Bernthal", "type": "Actor", "group": "actor", "production": "film", "pos": 6, "axisN": 28, "deg": 1}, {"name": "Benny Safdie", "type": "Actor", "group": "actor", "production": "film", "pos": 1, "axisN": 28, "deg": 1}, {"name": "Himesh Patel", "type": "Actor", "group": "actor", "production": "film", "pos": 4, "axisN": 28, "deg": 1}, {"name": "Mia Goth", "type": "Actor", "group": "actor", "production": "film", "pos": 9, "axisN": 28, "deg": 1}, {"name": "Jorge Rivera-Herrans", "type": "Actor", "group": "actor", "production": "musical", "pos": 18, "axisN": 28, "deg": 2}, {"name": "Anna Lea", "type": "Actor", "group": "actor", "production": "musical", "pos": 14, "axisN": 28, "deg": 2}, {"name": "Miguel Veloso", "type": "Actor", "group": "actor", "production": "musical", "pos": 22, "axisN": 28, "deg": 1}, {"name": "Teagan Earley", "type": "Actor", "group": "actor", "production": "musical", "pos": 26, "axisN": 28, "deg": 1}, {"name": "Steven Rodriguez", "type": "Actor", "group": "actor", "production": "musical", "pos": 24, "axisN": 28, "deg": 1}, {"name": "Luke Holt", "type": "Actor", "group": "actor", "production": "musical", "pos": 21, "axisN": 28, "deg": 2}, {"name": "Armando Juli\u00e1n", "type": "Actor", "group": "actor", "production": "musical", "pos": 15, "axisN": 28, "deg": 1}, {"name": "Steven Dookie", "type": "Actor", "group": "actor", "production": "musical", "pos": 23, "axisN": 28, "deg": 1}, {"name": "Talya Sindel", "type": "Actor", "group": "actor", "production": "musical", "pos": 25, "axisN": 28, "deg": 1}, {"name": "Barbara Wangui", "type": "Actor", "group": "actor", "production": "musical", "pos": 17, "axisN": 28, "deg": 1}, {"name": "Troy Doherty", "type": "Actor", "group": "actor", "production": "musical", "pos": 27, "axisN": 28, "deg": 1}, {"name": "Ayron Alexander", "type": "Actor", "group": "actor", "production": "musical", "pos": 16, "axisN": 28, "deg": 2}, {"name": "KJ Burkhauser", "type": "Actor", "group": "actor", "production": "musical", "pos": 19, "axisN": 28, "deg": 1}, {"name": "Kira Stone", "type": "Actor", "group": "actor", "production": "musical", "pos": 20, "axisN": 28, "deg": 1}], "links": [{"s": 2, "o": 0, "cat": "story", "rel": "CHILD_OF"}, {"s": 2, "o": 1, "cat": "story", "rel": "CHILD_OF"}, {"s": 0, "o": 3, "cat": "story", "rel": "CHILD_OF"}, {"s": 0, "o": 4, "cat": "story", "rel": "CHILD_OF"}, {"s": 34, "o": 23, "cat": "story", "rel": "CHILD_OF"}, {"s": 0, "o": 1, "cat": "story", "rel": "MARRIED_TO"}, {"s": 18, "o": 17, "cat": "story", "rel": "MARRIED_TO"}, {"s": 19, "o": 16, "cat": "story", "rel": "MARRIED_TO"}, {"s": 18, "o": 19, "cat": "story", "rel": "SIBLING_OF"}, {"s": 17, "o": 16, "cat": "story", "rel": "SIBLING_OF"}, {"s": 5, "o": 0, "cat": "story", "rel": "IN_LAW_OF"}, {"s": 21, "o": 0, "cat": "story", "rel": "MENTORS"}, {"s": 21, "o": 2, "cat": "story", "rel": "MENTORS"}, {"s": 23, "o": 0, "cat": "story", "rel": "OPPOSES"}, {"s": 0, "o": 34, "cat": "story", "rel": "BLINDS"}, {"s": 34, "o": 0, "cat": "story", "rel": "CURSES"}, {"s": 25, "o": 0, "cat": "story", "rel": "OPPOSES"}, {"s": 25, "o": 0, "cat": "story", "rel": "HELPS"}, {"s": 24, "o": 0, "cat": "story", "rel": "HELPS"}, {"s": 26, "o": 0, "cat": "story", "rel": "DETAINS"}, {"s": 27, "o": 0, "cat": "story", "rel": "HELPS"}, {"s": 22, "o": 0, "cat": "story", "rel": "PUNISHES"}, {"s": 5, "o": 0, "cat": "story", "rel": "BETRAYS"}, {"s": 5, "o": 28, "cat": "story", "rel": "OFFENDS"}, {"s": 37, "o": 0, "cat": "story", "rel": "TEMPTS"}, {"s": 35, "o": 0, "cat": "story", "rel": "ATTACKS"}, {"s": 36, "o": 0, "cat": "story", "rel": "ATTACKS"}, {"s": 15, "o": 0, "cat": "story", "rel": "PROPHESIES_TO"}, {"s": 11, "o": 1, "cat": "story", "rel": "WOOS"}, {"s": 12, "o": 1, "cat": "story", "rel": "WOOS"}, {"s": 13, "o": 1, "cat": "story", "rel": "WOOS"}, {"s": 11, "o": 2, "cat": "story", "rel": "THREATENS"}, {"s": 0, "o": 11, "cat": "story", "rel": "KILLS"}, {"s": 9, "o": 0, "cat": "story", "rel": "HELPS"}, {"s": 10, "o": 0, "cat": "story", "rel": "RECOGNISES"}, {"s": 20, "o": 0, "cat": "story", "rel": "RECOGNISES"}, {"s": 14, "o": 11, "cat": "story", "rel": "ALLIES_WITH"}, {"s": 0, "o": 52, "cat": "dwells", "rel": "RULES"}, {"s": 1, "o": 52, "cat": "dwells", "rel": "RULES"}, {"s": 34, "o": 42, "cat": "dwells", "rel": "LIVES_IN"}, {"s": 25, "o": 45, "cat": "dwells", "rel": "LIVES_IN"}, {"s": 26, "o": 50, "cat": "dwells", "rel": "LIVES_IN"}, {"s": 27, "o": 43, "cat": "dwells", "rel": "LIVES_IN"}, {"s": 37, "o": 47, "cat": "dwells", "rel": "LIVES_IN"}, {"s": 35, "o": 48, "cat": "dwells", "rel": "LIVES_IN"}, {"s": 36, "o": 48, "cat": "dwells", "rel": "LIVES_IN"}, {"s": 28, "o": 49, "cat": "dwells", "rel": "KEEPS_CATTLE_ON"}, {"s": 38, "o": 41, "cat": "dwells", "rel": "LIVES_IN"}, {"s": 15, "o": 46, "cat": "dwells", "rel": "LIVES_IN"}, {"s": 39, "o": 40, "cat": "journey", "rel": "TRAVELS_TO"}, {"s": 40, "o": 41, "cat": "journey", "rel": "TRAVELS_TO"}, {"s": 41, "o": 42, "cat": "journey", "rel": "TRAVELS_TO"}, {"s": 42, "o": 43, "cat": "journey", "rel": "TRAVELS_TO"}, {"s": 43, "o": 44, "cat": "journey", "rel": "TRAVELS_TO"}, {"s": 44, "o": 45, "cat": "journey", "rel": "TRAVELS_TO"}, {"s": 45, "o": 46, "cat": "journey", "rel": "TRAVELS_TO"}, {"s": 46, "o": 47, "cat": "journey", "rel": "TRAVELS_TO"}, {"s": 47, "o": 48, "cat": "journey", "rel": "TRAVELS_TO"}, {"s": 48, "o": 49, "cat": "journey", "rel": "TRAVELS_TO"}, {"s": 49, "o": 50, "cat": "journey", "rel": "TRAVELS_TO"}, {"s": 50, "o": 51, "cat": "journey", "rel": "TRAVELS_TO"}, {"s": 51, "o": 52, "cat": "journey", "rel": "TRAVELS_TO"}, {"s": 53, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 53, "o": 22, "cat": "features", "rel": "FEATURES"}, {"s": 54, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 55, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 55, "o": 5, "cat": "features", "rel": "FEATURES"}, {"s": 55, "o": 6, "cat": "features", "rel": "FEATURES"}, {"s": 56, "o": 6, "cat": "features", "rel": "FEATURES"}, {"s": 56, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 56, "o": 38, "cat": "features", "rel": "FEATURES"}, {"s": 57, "o": 21, "cat": "features", "rel": "FEATURES"}, {"s": 57, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 58, "o": 34, "cat": "features", "rel": "FEATURES"}, {"s": 58, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 58, "o": 6, "cat": "features", "rel": "FEATURES"}, {"s": 58, "o": 5, "cat": "features", "rel": "FEATURES"}, {"s": 59, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 59, "o": 34, "cat": "features", "rel": "FEATURES"}, {"s": 59, "o": 6, "cat": "features", "rel": "FEATURES"}, {"s": 60, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 60, "o": 34, "cat": "features", "rel": "FEATURES"}, {"s": 60, "o": 5, "cat": "features", "rel": "FEATURES"}, {"s": 61, "o": 21, "cat": "features", "rel": "FEATURES"}, {"s": 61, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 62, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 62, "o": 5, "cat": "features", "rel": "FEATURES"}, {"s": 63, "o": 5, "cat": "features", "rel": "FEATURES"}, {"s": 63, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 64, "o": 27, "cat": "features", "rel": "FEATURES"}, {"s": 64, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 64, "o": 5, "cat": "features", "rel": "FEATURES"}, {"s": 65, "o": 23, "cat": "features", "rel": "FEATURES"}, {"s": 65, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 66, "o": 25, "cat": "features", "rel": "FEATURES"}, {"s": 66, "o": 5, "cat": "features", "rel": "FEATURES"}, {"s": 66, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 67, "o": 24, "cat": "features", "rel": "FEATURES"}, {"s": 67, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 68, "o": 25, "cat": "features", "rel": "FEATURES"}, {"s": 68, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 69, "o": 25, "cat": "features", "rel": "FEATURES"}, {"s": 69, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 70, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 70, "o": 3, "cat": "features", "rel": "FEATURES"}, {"s": 70, "o": 6, "cat": "features", "rel": "FEATURES"}, {"s": 71, "o": 15, "cat": "features", "rel": "FEATURES"}, {"s": 71, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 72, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 73, "o": 37, "cat": "features", "rel": "FEATURES"}, {"s": 73, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 74, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 74, "o": 37, "cat": "features", "rel": "FEATURES"}, {"s": 75, "o": 35, "cat": "features", "rel": "FEATURES"}, {"s": 75, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 75, "o": 5, "cat": "features", "rel": "FEATURES"}, {"s": 76, "o": 5, "cat": "features", "rel": "FEATURES"}, {"s": 76, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 76, "o": 28, "cat": "features", "rel": "FEATURES"}, {"s": 77, "o": 22, "cat": "features", "rel": "FEATURES"}, {"s": 77, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 77, "o": 5, "cat": "features", "rel": "FEATURES"}, {"s": 78, "o": 2, "cat": "features", "rel": "FEATURES"}, {"s": 78, "o": 21, "cat": "features", "rel": "FEATURES"}, {"s": 79, "o": 2, "cat": "features", "rel": "FEATURES"}, {"s": 79, "o": 11, "cat": "features", "rel": "FEATURES"}, {"s": 79, "o": 21, "cat": "features", "rel": "FEATURES"}, {"s": 80, "o": 21, "cat": "features", "rel": "FEATURES"}, {"s": 80, "o": 2, "cat": "features", "rel": "FEATURES"}, {"s": 80, "o": 1, "cat": "features", "rel": "FEATURES"}, {"s": 81, "o": 26, "cat": "features", "rel": "FEATURES"}, {"s": 81, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 82, "o": 21, "cat": "features", "rel": "FEATURES"}, {"s": 82, "o": 22, "cat": "features", "rel": "FEATURES"}, {"s": 82, "o": 29, "cat": "features", "rel": "FEATURES"}, {"s": 82, "o": 33, "cat": "features", "rel": "FEATURES"}, {"s": 82, "o": 30, "cat": "features", "rel": "FEATURES"}, {"s": 82, "o": 31, "cat": "features", "rel": "FEATURES"}, {"s": 82, "o": 32, "cat": "features", "rel": "FEATURES"}, {"s": 83, "o": 26, "cat": "features", "rel": "FEATURES"}, {"s": 83, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 84, "o": 24, "cat": "features", "rel": "FEATURES"}, {"s": 84, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 85, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 85, "o": 36, "cat": "features", "rel": "FEATURES"}, {"s": 86, "o": 23, "cat": "features", "rel": "FEATURES"}, {"s": 86, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 87, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 87, "o": 23, "cat": "features", "rel": "FEATURES"}, {"s": 88, "o": 1, "cat": "features", "rel": "FEATURES"}, {"s": 88, "o": 11, "cat": "features", "rel": "FEATURES"}, {"s": 88, "o": 2, "cat": "features", "rel": "FEATURES"}, {"s": 89, "o": 11, "cat": "features", "rel": "FEATURES"}, {"s": 89, "o": 2, "cat": "features", "rel": "FEATURES"}, {"s": 89, "o": 12, "cat": "features", "rel": "FEATURES"}, {"s": 89, "o": 13, "cat": "features", "rel": "FEATURES"}, {"s": 90, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 90, "o": 11, "cat": "features", "rel": "FEATURES"}, {"s": 91, "o": 21, "cat": "features", "rel": "FEATURES"}, {"s": 91, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 92, "o": 0, "cat": "features", "rel": "FEATURES"}, {"s": 92, "o": 1, "cat": "features", "rel": "FEATURES"}, {"s": 93, "o": 0, "cat": "plays", "rel": "PLAYS"}, {"s": 94, "o": 1, "cat": "plays", "rel": "PLAYS"}, {"s": 95, "o": 2, "cat": "plays", "rel": "PLAYS"}, {"s": 96, "o": 11, "cat": "plays", "rel": "PLAYS"}, {"s": 97, "o": 21, "cat": "plays", "rel": "PLAYS"}, {"s": 98, "o": 26, "cat": "plays", "rel": "PLAYS"}, {"s": 99, "o": 18, "cat": "plays", "rel": "PLAYS"}, {"s": 99, "o": 19, "cat": "plays", "rel": "PLAYS"}, {"s": 100, "o": 25, "cat": "plays", "rel": "PLAYS"}, {"s": 101, "o": 34, "cat": "plays", "rel": "PLAYS"}, {"s": 102, "o": 9, "cat": "plays", "rel": "PLAYS"}, {"s": 103, "o": 17, "cat": "plays", "rel": "PLAYS"}, {"s": 104, "o": 16, "cat": "plays", "rel": "PLAYS"}, {"s": 105, "o": 5, "cat": "plays", "rel": "PLAYS"}, {"s": 106, "o": 14, "cat": "plays", "rel": "PLAYS"}, {"s": 107, "o": 0, "cat": "plays", "rel": "PLAYS"}, {"s": 107, "o": 34, "cat": "plays", "rel": "PLAYS"}, {"s": 108, "o": 1, "cat": "plays", "rel": "PLAYS"}, {"s": 108, "o": 37, "cat": "plays", "rel": "PLAYS"}, {"s": 109, "o": 2, "cat": "plays", "rel": "PLAYS"}, {"s": 110, "o": 21, "cat": "plays", "rel": "PLAYS"}, {"s": 111, "o": 23, "cat": "plays", "rel": "PLAYS"}, {"s": 112, "o": 22, "cat": "plays", "rel": "PLAYS"}, {"s": 112, "o": 7, "cat": "plays", "rel": "PLAYS"}, {"s": 113, "o": 5, "cat": "plays", "rel": "PLAYS"}, {"s": 114, "o": 6, "cat": "plays", "rel": "PLAYS"}, {"s": 115, "o": 25, "cat": "plays", "rel": "PLAYS"}, {"s": 116, "o": 26, "cat": "plays", "rel": "PLAYS"}, {"s": 117, "o": 24, "cat": "plays", "rel": "PLAYS"}, {"s": 118, "o": 11, "cat": "plays", "rel": "PLAYS"}, {"s": 118, "o": 8, "cat": "plays", "rel": "PLAYS"}, {"s": 119, "o": 35, "cat": "plays", "rel": "PLAYS"}, {"s": 120, "o": 27, "cat": "plays", "rel": "PLAYS"}]};
+
+const W = 1820, H = 1470, CX = W/2, CY = H/2;
+const R0 = 150;
+const AVATAR_R = 16;
+
+// Each axis gets its own reach (r1): the horizontal axes hold the most
+// nodes (40 songs, 28 actors), so they stretch further than the vertical
+// ones - that is what makes the plot wider without making it taller.
+const AXES = {
+  character: { a: -Math.PI/2, r1: 640, label: "CHARACTERS", color: "#d9f24b" },
+  song:      { a: 0,           r1: 830, label: "SONGS",      color: "#e88fb0" },
+  place:     { a: Math.PI/2,   r1: 640, label: "PLACES",     color: "#7fd6d4" },
+  actor:     { a: Math.PI,     r1: 830, label: "ACTORS",     color: "#ffffff" },
+};
+
+const CAT_STYLE = {
+  journey:  { stroke: "#f0c94f",              width: 2.4, op: 0.95 },
+  story:    { stroke: "rgba(217,242,75,1)",   width: 1.2, op: 0.38 },
+  features: { stroke: "rgba(232,143,176,1)",  width: 1.1, op: 0.22 },
+  plays:    { stroke: "rgba(255,255,255,1)",  width: 1.1, op: 0.30 },
+  dwells:   { stroke: "rgba(127,214,212,1)",  width: 1.2, op: 0.42 },
+};
+
+data.nodes.forEach(n => {
+  const ax = AXES[n.group];
+  const t = n.axisN > 1 ? n.pos / (n.axisN - 1) : 0.5;
+  n.r = R0 + t * (ax.r1 - R0);
+  n.x = CX + n.r * Math.cos(ax.a);
+  n.y = CY + n.r * Math.sin(ax.a);
+});
+
+const adj = new Map();
+data.nodes.forEach((n, i) => { n.i = i; adj.set(i, new Set([i])); });
+data.links.forEach(l => { adj.get(l.s).add(l.o); adj.get(l.o).add(l.s); });
+
+// ── tooltip knowledge: turn the raw links into readable sentences ──
+
+// One concise line per place: what happens here.
+const PLACE_NOTES = {
+  "Troy": "Where the war ends and the long journey home begins.",
+  "Ismarus": "Fresh from Troy, Odysseus raids the Cicones - and pays for it.",
+  "Lotus Eaters' Island": "One taste of the lotus and the crew forgets home.",
+  "Cyclops Island": "Odysseus blinds Polyphemus, then fatally boasts his real name.",
+  "Aeolia": "Aeolus bags the winds; the crew opens it within sight of Ithaca.",
+  "Laestrygonia": "Giant cannibals sink eleven of the twelve ships.",
+  "Aeaea": "Circe turns the men into pigs - then becomes an unlikely ally.",
+  "The Underworld": "Odysseus seeks the prophet Tiresias among the dead.",
+  "Sirens' Strait": "Wax in every ear but his own - lashed to the mast, he hears the song.",
+  "Strait of Scylla and Charybdis": "Six heads above, a whirlpool below: passage costs six men.",
+  "Thrinacia": "The starving crew slaughters Helios' sacred cattle. Zeus answers.",
+  "Ogygia": "Calypso keeps Odysseus here for seven long years.",
+  "Scheria": "Washed ashore, he tells his tale - and the Phaeacians sail him home.",
+  "Ithaca": "Home at last: the suitors, the bow, the reckoning."
+};
+
+// Every relationship read in both directions: CHILD_OF forwards is
+// "child of", but seen from the other node it means "parent of".
+const REL_FWD = { CHILD_OF:"child of", MARRIED_TO:"married to", SIBLING_OF:"sibling of", IN_LAW_OF:"in-law of", MENTORS:"mentors", OPPOSES:"opposes", BLINDS:"blinds", CURSES:"curses", HELPS:"helps", DETAINS:"detains", PUNISHES:"punishes", BETRAYS:"betrays", OFFENDS:"offends", TEMPTS:"tempts", ATTACKS:"attacks", PROPHESIES_TO:"prophesies to", WOOS:"woos", THREATENS:"threatens", KILLS:"kills", RECOGNISES:"recognises", ALLIES_WITH:"allies with", RULES:"rules", LIVES_IN:"lives in", KEEPS_CATTLE_ON:"keeps cattle on" };
+const REL_REV = { CHILD_OF:"parent of", MARRIED_TO:"married to", SIBLING_OF:"sibling of", IN_LAW_OF:"in-law of", MENTORS:"mentored by", OPPOSES:"opposed by", BLINDS:"blinded by", CURSES:"cursed by", HELPS:"helped by", DETAINS:"detains", PUNISHES:"punished by", BETRAYS:"betrayed by", OFFENDS:"offended by", TEMPTS:"tempted by", ATTACKS:"attacked by", PROPHESIES_TO:"hears prophecy from", WOOS:"wooed by", THREATENS:"threatened by", KILLS:"killed by", RECOGNISES:"recognised by", ALLIES_WITH:"allies with", RULES:"ruled by", LIVES_IN:"home of", KEEPS_CATTLE_ON:"pasture of" };
+
+const info = data.nodes.map(() => ({ story: [], dwell: [], residents: [], songs: [], feat: [], playedBy: [], roles: [] }));
+const musicalActorOf = new Map();
+data.links.forEach(l => {
+  const S = data.nodes[l.s], O = data.nodes[l.o];
+  if (l.cat === "story") {
+    info[l.s].story.push(`${REL_FWD[l.rel]} ${O.name}`);
+    info[l.o].story.push(`${REL_REV[l.rel]} ${S.name}`);
+  } else if (l.cat === "dwells") {
+    info[l.s].dwell.push(`${REL_FWD[l.rel]} ${O.name}`);
+    info[l.o].residents.push(`${REL_REV[l.rel]} ${S.name}`);
+  } else if (l.cat === "features") {
+    info[l.o].songs.push(S.name);
+    info[l.s].feat.push(l.o);
+  } else if (l.cat === "plays") {
+    info[l.o].playedBy.push(`${S.name} (${S.production})`);
+    info[l.s].roles.push(O.name);
+    if (S.production === "musical") musicalActorOf.set(l.o, S.name);
+  }
+});
+
+const capFirst = s => s.charAt(0).toUpperCase() + s.slice(1);
+function firstFew(arr, k) {
+  return arr.length > k ? arr.slice(0, k).join(", ") + ` +${arr.length - k} more` : arr.join(", ");
+}
+
+function tipLines(n) {
+  const I = info[n.i], out = [];
+  if (n.group === "place") {
+    if (PLACE_NOTES[n.name]) out.push(`<span class="note">${PLACE_NOTES[n.name]}</span>`);
+    out.push(`Stop ${n.pos + 1} of ${n.axisN} on the voyage`);
+    if (I.residents.length) out.push(capFirst(I.residents.join(" · ")));
+    return out;
+  }
+  if (n.group === "character") {
+    if (I.story.length) out.push(capFirst(firstFew(I.story, 5).replace(/, \+/, " · +").split(", ").join(" · ")));
+    if (I.dwell.length) out.push(capFirst(I.dwell.join(" · ")));
+    if (I.playedBy.length) out.push("Played by " + I.playedBy.join(" · "));
+    if (I.songs.length) out.push(`In ${I.songs.length} song${I.songs.length === 1 ? "" : "s"}: ` + firstFew(I.songs, 3));
+    return out;
+  }
+  if (n.group === "song") {
+    if (I.feat.length) out.push("Features " + I.feat.map(i => data.nodes[i].name).join(", "));
+    const voices = [...new Set(I.feat.map(i => musicalActorOf.get(i)).filter(Boolean))];
+    if (voices.length) out.push("Voiced by " + voices.join(", "));
+    return out;
+  }
+  if (n.group === "actor" && I.roles.length) out.push("Plays " + I.roles.join(" & "));
+  return out;
+}
+
+const svg = d3.select("#chart").insert("svg", "#tooltip")
+  .attr("viewBox", `0 0 ${W} ${H}`);
+
+Object.entries(AXES).forEach(([g, ax]) => {
+  svg.append("line")
+    .attr("x1", CX + (R0-16) * Math.cos(ax.a)).attr("y1", CY + (R0-16) * Math.sin(ax.a))
+    .attr("x2", CX + (ax.r1+16) * Math.cos(ax.a)).attr("y2", CY + (ax.r1+16) * Math.sin(ax.a))
+    .attr("stroke", "rgba(244,234,217,.22)").attr("stroke-width", 1.5);
+  svg.append("text")
+    .attr("x", CX + (ax.r1+46) * Math.cos(ax.a)).attr("y", CY + (ax.r1+46) * Math.sin(ax.a))
+    .attr("text-anchor", "middle").attr("dominant-baseline", "middle")
+    .attr("fill", ax.color).attr("font-size", 14).attr("font-weight", 700)
+    .attr("letter-spacing", "0.14em")
+    .text(ax.label);
+});
+
+function edgePath(l) {
+  const a = data.nodes[l.s], b = data.nodes[l.o];
+  if (a.group === b.group) {
+    const ax = AXES[a.group].a;
+    const perp = ax - Math.PI/2;
+    const rm = (a.r + b.r) / 2;
+    const bulge = 32 + Math.abs(a.r - b.r) * 0.32;
+    const mx = CX + rm * Math.cos(ax) + bulge * Math.cos(perp);
+    const my = CY + rm * Math.sin(ax) + bulge * Math.sin(perp);
+    return `M${a.x},${a.y} Q${mx},${my} ${b.x},${b.y}`;
+  }
+  const mx = (a.x + b.x)/2, my = (a.y + b.y)/2;
+  const cx2 = mx + (CX - mx) * 0.72, cy2 = my + (CY - my) * 0.72;
+  return `M${a.x},${a.y} Q${cx2},${cy2} ${b.x},${b.y}`;
+}
+
+const linkSel = svg.append("g").selectAll("path")
+  .data(data.links).join("path")
+  .attr("d", edgePath)
+  .attr("fill", "none")
+  .attr("stroke", l => CAT_STYLE[l.cat].stroke)
+  .attr("stroke-width", l => CAT_STYLE[l.cat].width)
+  .attr("stroke-opacity", l => CAT_STYLE[l.cat].op)
+  .attr("stroke-linecap", "round");
+
+const NODE_COLOR = {
+  Hero: "#f0c94f", Mortal: "#d9f24b", Deity: "#9ee7e4", Monster: "#e8604c", Animal: "#f4ead9",
+  Place: "#7fd6d4", Song: "#e88fb0", Actor: "#ffffff",
+};
+
+const tooltip = d3.select("#tooltip");
+const defs = svg.append("defs");
+
+const dotSel = svg.append("g").selectAll("circle")
+  .data(data.nodes.filter(n => n.group !== "actor")).join("circle")
+  .attr("cx", n => n.x).attr("cy", n => n.y)
+  .attr("r", n => 4 + Math.min(11, Math.sqrt(n.deg) * 2.0))
+  .attr("fill", n => NODE_COLOR[n.type])
+  .attr("stroke", "#0e2836").attr("stroke-width", 1.3)
+  .style("cursor", "pointer");
+
+const actorSel = svg.append("g").selectAll("g")
+  .data(data.nodes.filter(n => n.group === "actor")).join("g")
+  .attr("transform", n => `translate(${n.x},${n.y})`)
+  .style("cursor", "pointer");
+
+actorSel.append("circle")
+  .attr("r", AVATAR_R)
+  .attr("fill", "#1d3d50")
+  .attr("stroke", n => n.production === "film" ? "#f0c94f" : "#e88fb0")
+  .attr("stroke-width", 2.2);
+
+actorSel.append("text")
+  .attr("class", "initials")
+  .attr("text-anchor", "middle").attr("dominant-baseline", "central")
+  .attr("fill", "#f4ead9").attr("font-size", 11).attr("font-weight", 700)
+  .text(n => n.name.split(/\s+/).map(w => w[0]).join("").slice(0, 3));
+
+actorSel.each(function(n) {
+  const g = d3.select(this);
+  fetch("https://en.wikipedia.org/api/rest_v1/page/summary/" + encodeURIComponent(n.name.replace(/ /g, "_")))
+    .then(r => r.ok ? r.json() : null)
+    .then(j => {
+      if (!j || !j.thumbnail || !j.thumbnail.source) return;
+      if (j.type && j.type.includes("disambiguation")) return;
+      const clipId = "clip-" + n.i;
+      defs.append("clipPath").attr("id", clipId)
+        .append("circle").attr("r", AVATAR_R - 1);
+      g.select("text.initials").remove();
+      g.insert("image", "text")
+        .attr("href", j.thumbnail.source)
+        .attr("x", -AVATAR_R).attr("y", -AVATAR_R)
+        .attr("width", AVATAR_R*2).attr("height", AVATAR_R*2)
+        .attr("preserveAspectRatio", "xMidYMid slice")
+        .attr("clip-path", `url(#${clipId})`);
+    })
+    .catch(() => {});
+});
+
+// ── song previews (iTunes Search API, 30s clips) ──
+let soundOn = false;
+const soundBtn = document.getElementById("soundBtn");
+soundBtn.addEventListener("click", () => {
+  soundOn = !soundOn;
+  soundBtn.classList.toggle("on", soundOn);
+  soundBtn.textContent = soundOn ? "🔊 song previews: on" : "🔇 song previews: off";
+  if (!soundOn) stopSong();
+});
+
+const audio = new Audio();
+audio.volume = 0.7;
+const previewCache = new Map();
+let playTimer = null;
+
+function jsonp(url) {
+  return new Promise((resolve, reject) => {
+    const cb = "cb_" + Math.random().toString(36).slice(2);
+    window[cb] = data => { resolve(data); delete window[cb]; s.remove(); };
+    const s = document.createElement("script");
+    s.src = url + "&callback=" + cb;
+    s.onerror = () => { reject(); delete window[cb]; s.remove(); };
+    document.body.appendChild(s);
+  });
+}
+function itunes(url) {
+  return fetch(url).then(r => r.json()).catch(() => jsonp(url));
+}
+
+// Lowercase and strip punctuation so "We'll Be Fine" matches "well be fine".
+const norm = s => (s || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+
+function findPreview(name) {
+  if (previewCache.has(name)) return previewCache.get(name);
+  const target = norm(name);
+  const p = itunes("https://itunes.apple.com/search?media=music&limit=12&term=" +
+      encodeURIComponent(name + " EPIC The Musical"))
+    .then(j => {
+      const hits = (j.results || []).filter(t => t.previewUrl);
+      // The title must actually be this song - iTunes search happily
+      // returns OTHER tracks from the same album, which is how hovering
+      // "Polyphemus" once played "Survive".
+      const titled = hits.filter(t => {
+        const tn = norm(t.trackName);
+        return tn === target || tn.startsWith(target + " ");
+      });
+      // Prefer the official recordings (Jorge Rivera-Herrans) over
+      // covers and translations, then any EPIC-album match.
+      const pick =
+        titled.find(t => norm(t.artistName).includes("jorge rivera")) ||
+        titled.find(t => (t.collectionName || "").toUpperCase().includes("EPIC")) ||
+        titled[0] || null;
+      return pick ? pick.previewUrl : null;
+    })
+    .catch(() => null);
+  previewCache.set(name, p);
+  return p;
+}
+
+function playSong(n) {
+  if (!soundOn) return;
+  clearTimeout(playTimer);
+  playTimer = setTimeout(() => {
+    findPreview(n.name).then(url => {
+      if (!url || !soundOn) return;
+      audio.src = url;
+      audio.play().catch(() => {});
+    });
+  }, 250);   // small delay so sweeping the mouse doesn't DJ
+}
+function stopSong() {
+  clearTimeout(playTimer);
+  audio.pause();
+}
+
+function focus(i) {
+  const keep = adj.get(i);
+  dotSel.transition().duration(120).attr("opacity", n => keep.has(n.i) ? 1 : 0.12);
+  actorSel.transition().duration(120).attr("opacity", n => keep.has(n.i) ? 1 : 0.12);
+  linkSel.transition().duration(120)
+    .attr("stroke-opacity", l => (l.s === i || l.o === i) ? 0.95 : 0.03)
+    .attr("stroke-width", l => (l.s === i || l.o === i) ? CAT_STYLE[l.cat].width + 0.9 : CAT_STYLE[l.cat].width);
+}
+function unfocus() {
+  dotSel.transition().duration(160).attr("opacity", 1);
+  actorSel.transition().duration(160).attr("opacity", 1);
+  linkSel.transition().duration(160)
+    .attr("stroke-opacity", l => CAT_STYLE[l.cat].op)
+    .attr("stroke-width", l => CAT_STYLE[l.cat].width);
+}
+
+function wireHover(sel) {
+  sel.on("mouseover", function(event, n) {
+      focus(n.i);
+      const extra = n.production ? ` · ${n.production === "film" ? "The Odyssey (2026)" : "EPIC: The Musical"}` : "";
+      let songLine = "";
+      if (n.group === "song") {
+        songLine = soundOn ? `<br><span class="play">♪ playing 30s preview…</span>`
+                           : `<br><span class="play">♪ turn on song previews (top) to hear it</span>`;
+        playSong(n);
+      }
+      const body = tipLines(n).map(s => `<span class="line">${s}</span>`).join("");
+      tooltip.style("opacity", 1)
+        .html(`<div class="t">${n.type}${extra}</div><b>${n.name}</b>${body}${songLine}`);
+    })
+    .on("mousemove", function(event) {
+      const [mx, my] = d3.pointer(event, d3.select("#chart").node());
+      tooltip.style("left", (mx + 16) + "px").style("top", (my - 10) + "px");
+    })
+    .on("mouseout", function(event, n) {
+      unfocus(); tooltip.style("opacity", 0);
+      if (n.group === "song") stopSong();
+    });
+}
+wireHover(dotSel);
+wireHover(actorSel);
+
+// Labels: every place gets one (14 fit comfortably), busy characters
+// alternate left/right of their axis so neighbours never overlap, and
+// EVERY song fans out at 45 degrees along the horizontal axis - steep
+// enough that forty neighbours clear each other, with long titles
+// trimmed (the tooltip always has the full name).
+// Everyone except the actors gets a label (actors have photo avatars
+// and introduce themselves on hover). Characters alternate sides of
+// their axis so 39 tightly-packed neighbours never overlap.
+const labelled = data.nodes.filter(n => n.group !== "actor");
+
+const trim = s => (s.length > 26 ? s.slice(0, 24) + "…" : s);
+
+svg.append("g").selectAll("text")
+  .data(labelled).join("text")
+  .attr("transform", n => n.group === "song"
+    ? `translate(${n.x + 4},${n.y - 14}) rotate(-45)`
+    : `translate(${n.x + (n.group === "character" && n.pos % 2 === 0 ? -14 : 14)},${n.y + 4})`)
+  .attr("text-anchor", n => n.group === "character" && n.pos % 2 === 0 ? "end" : "start")
+  .attr("fill", "rgba(244,234,217,.85)")
+  .attr("font-size", n => n.group === "place" ? 12 : 10.5)
+  .text(n => n.group === "song" ? trim(n.name) : n.name);
+</script>
+</body>
+</html>
